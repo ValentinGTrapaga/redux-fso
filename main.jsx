@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import './style.css'
 
 import { configureStore } from '@reduxjs/toolkit'
-import { noteReducer } from './noteReducer'
+import { noteReducer } from './reducers/noteReducer'
 
 const store = configureStore({ reducer: noteReducer })
 
