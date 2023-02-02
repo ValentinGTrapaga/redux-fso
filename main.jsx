@@ -3,41 +3,37 @@ import ReactDOM from 'react-dom/client'
 import './style.css'
 
 import { configureStore } from '@reduxjs/toolkit'
-import { noteReducer } from './reducers/noteReducer'
+import {
+  noteReducer,
+  createNote,
+  toggleImportanceOf
+} from './reducers/noteReducer'
 
 const store = configureStore({ reducer: noteReducer })
 
-store.dispatch({
-  type: 'NEW_NOTE',
-  payload: {
-    content: 'the app state is in redux store',
-    important: true,
-    id: 1
-  }
-})
+const addNote = (evt) => {
+  evt.preventDefault()
+  const content = evt.target.note.value
+  evt.target.note.value = ''
+  store.dispatch(createNote(content))
+}
 
-store.dispatch({
-  type: 'NEW_NOTE',
-  payload: {
-    content: 'state changes are made with actions',
-    important: false,
-    id: 2
-  }
-})
-
-store.dispatch({
-  type: 'TOGGLE_IMPORTANCE',
-  payload: {
-    id: 2
-  }
-})
+const toggleImportance = (id) => {
+  store.dispatch(toggleImportanceOf(id))
+}
 
 const App = () => {
   return (
     <div>
+      <form onSubmit={addNote}>
+        <input name='note' />
+        <button type='submit'>add</button>
+      </form>
       <ul>
         {store.getState().map((note) => (
-          <li key={note.id}>
+          <li
+            key={note.id}
+            onClick={() => toggleImportance(note.id)}>
             {note.content} <strong>{note.important ? 'important' : ''}</strong>
           </li>
         ))}
