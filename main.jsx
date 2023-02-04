@@ -2,52 +2,22 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './style.css'
 
+import { Provider } from 'react-redux'
+
 import { configureStore } from '@reduxjs/toolkit'
-import {
-  noteReducer,
-  createNote,
-  toggleImportanceOf
-} from './reducers/noteReducer'
+import noteReducer from './reducers/noteReducer'
+import { filterReducer } from './reducers/filterReducer'
 
-const store = configureStore({ reducer: noteReducer })
+import { App } from './App'
 
-const addNote = (evt) => {
-  evt.preventDefault()
-  const content = evt.target.note.value
-  evt.target.note.value = ''
-  store.dispatch(createNote(content))
-}
-
-const toggleImportance = (id) => {
-  store.dispatch(toggleImportanceOf(id))
-}
-
-const App = () => {
-  return (
-    <div>
-      <form onSubmit={addNote}>
-        <input name='note' />
-        <button type='submit'>add</button>
-      </form>
-      <ul>
-        {store.getState().map((note) => (
-          <li
-            key={note.id}
-            onClick={() => toggleImportance(note.id)}>
-            {note.content} <strong>{note.important ? 'important' : ''}</strong>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+const store = configureStore({
+  reducer: { notes: noteReducer, filter: filterReducer }
+})
 
 const root = ReactDOM.createRoot(document.getElementById('app'))
 
-const renderApp = () => {
-  root.render(<App />)
-}
-
-renderApp()
-
-store.subscribe(renderApp)
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
