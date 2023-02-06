@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client'
 import './style.css'
 
 import { Provider } from 'react-redux'
-
 import { configureStore } from '@reduxjs/toolkit'
-import noteReducer from './reducers/noteReducer'
+
+import noteReducer, { setNotes } from './reducers/noteReducer'
 import { filterReducer } from './reducers/filterReducer'
 
 import { App } from './App'
