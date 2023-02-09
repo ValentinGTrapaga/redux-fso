@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getAll, createNew } from './../services/notes'
 
 const noteSlice = createSlice({
   name: 'notes',
   initialState: [],
   reducers: {
-    createNote(state, action) {
+    appendNote(state, action) {
       return [...state, action.payload]
     },
     toggleImportanceOf(state, action) {
@@ -15,11 +16,9 @@ const noteSlice = createSlice({
         if (note.id === id) {
           return { ...note, important: !note.important }
         }
+
         return note
       })
-    },
-    appendNote(state, action) {
-      return [...state, action.payload]
     },
     setNotes(state, action) {
       return action.payload
@@ -27,8 +26,19 @@ const noteSlice = createSlice({
   }
 })
 
-const generateId = () => Number((Math.random() * 1000000).toFixed(0))
+export const initializeNotes = () => {
+  return async (dispatch) => {
+    const notes = await getAll()
+    dispatch(setNotes(notes))
+  }
+}
 
-export const { createNote, toggleImportanceOf, appendNote, setNotes } =
-  noteSlice.actions
+export const createNote = (content) => {
+  return async (dispatch) => {
+    const newNote = await createNew(content)
+    dispatch(appendNote(newNote))
+  }
+}
+
+export const { toggleImportanceOf, setNotes, appendNote } = noteSlice.actions
 export default noteSlice.reducer

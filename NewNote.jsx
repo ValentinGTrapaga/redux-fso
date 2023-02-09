@@ -2,8 +2,6 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { createNote } from './reducers/noteReducer'
 
-import { createNew } from './services/notes'
-
 export const NewNote = () => {
   const dispatch = useDispatch()
 
@@ -11,8 +9,7 @@ export const NewNote = () => {
     evt.preventDefault()
     const content = evt.target.note.value
     evt.target.note.value = ''
-    const newNote = await createNew(content)
-    dispatch(createNote(newNote))
+    dispatch(createNote(content))
   }
 
   return (
